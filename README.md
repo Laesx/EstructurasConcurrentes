@@ -13,7 +13,7 @@ Este proyecto Java simula un almacén en el que se utilizan hilos para gestionar
 
 ## Requisitos
 
-- Java 8 o superior.
+- Java 7 o superior.
 
 ## Ejecución
 
