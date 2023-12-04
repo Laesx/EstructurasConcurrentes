@@ -2,23 +2,21 @@ package pojos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class Almacen {
-    List<Producto> productos;
+    Queue<Producto> productos;
 
     public Almacen(){
-        productos = new ArrayList<>();
+        productos = new ConcurrentLinkedDeque<>();
     }
 
-    public Almacen(Almacen almacen){
-        for (int i = 0; i < almacen.productos.size(); i++){
-            this.addProducto(almacen.productos.get(i));
-        }
-    }
     public boolean addProducto(Producto producto){
         boolean added = false;
-
-        if(!existe(producto.getId())) {
+        int posicion = existe(productos, producto.getId());
+        //Si no existe
+        if(posicion == -1) {
             productos.add(producto);
             added = true;
         }
@@ -28,8 +26,9 @@ public class Almacen {
 
     public boolean deleteProducto(int id){
         boolean deleted = false;
-
-        if(existe(id)) {
+        int posicion = existe(productos, id);
+        //Si existe
+        if(posicion != -1) {
             productos.remove(id);
             deleted = true;
         }
@@ -40,16 +39,19 @@ public class Almacen {
     public boolean modifyProducto(Producto producto){
         boolean modified = false;
 
-        if(existe(producto.getId())){
-            productos.get(producto.getId()).setDescripcion(producto.getDescripcion());
-            productos.get(producto.getId()).setNombre(producto.getNombre());
-            modified = true;
+        for(Producto indice: productos){
+            if(indice.getId() == producto.getId()){
+                indice.setNombre(producto.getNombre());
+                indice.setDescripcion(producto.getDescripcion());
+                modified = true;
+                break;
+            }
         }
 
         return modified;
     }
 
-    public List<Producto> obtenerCatalogo(){
+    public Queue<Producto> obtenerCatalogo(){
         return this.productos;
     }
 
@@ -59,13 +61,33 @@ public class Almacen {
         }
     }
 
-    private boolean existe(int id){
-        boolean existe = false;
 
-        for (int i = 0; i < this.productos.size() && !existe; i++)
-            if(id == productos.get(i).getId())
-                existe = true;
 
-        return existe;
+    public <T> int encontrarPosicion(Queue<Producto> cola, T elementoBuscar) {
+        int posicion = 0;
+
+        for (Producto elemento : cola) {
+            if (elemento.equals(elementoBuscar)) {
+                return posicion;
+            }
+            posicion++;
+        }
+
+        // Si el elemento no se encuentra, devolver -1
+        return -1;
+    }
+
+    public static int existe(Queue<Producto> cola, int idElementoBuscar) {
+        int posicion = 0;
+
+        for (Producto producto : cola) {
+            if (producto.getId() == idElementoBuscar) {
+                return posicion;
+            }
+            posicion++;
+        }
+
+        // Si el elemento no se encuentra, devolver -1
+        return -1;
     }
 }
