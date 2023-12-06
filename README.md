@@ -1,7 +1,5 @@
 # Tienda Online
 
-### Casos de uso
-+ Test
 # Almacén en Java con Hilos y ConcurrentLinkedQueue
 
 Este proyecto Java simula un almacén en el que se utilizan hilos para gestionar diferentes operaciones concurrentes. Se utiliza `ConcurrentLinkedQueue` para manejar de manera segura las operaciones en el almacén.
