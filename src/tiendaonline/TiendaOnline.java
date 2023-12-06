@@ -4,13 +4,23 @@
  */
 package tiendaonline;
 
+import pojos.Almacen;
+
+import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  *
  * @author losgu
  */
 public class TiendaOnline {
+
+    // Aqui se crea un almacen con una estructura concurrente para que sea seguro.
+    private static final Almacen almacen = new Almacen(new ConcurrentLinkedDeque<>());
+
+    // Aqui se crea un almacen con una estructura no concurrente para que no sea seguro y demostrar que falla.
+    private static final Almacen almacenNoSeguro = new Almacen(new LinkedList<>());
 
     /**
      * @param args the command line arguments
@@ -28,6 +38,7 @@ public class TiendaOnline {
             System.out.println("¿Qué operación deseas realizar?");
             System.out.println("\t1. Mostrar todos los productos.");
             System.out.println("\t2. Añadir productos.");
+            System.out.println("\t3. Añadir productos de forma no segura.");
             System.out.println("\t0. Salir\n");
 
             System.out.print("Opción: ");
@@ -38,7 +49,10 @@ public class TiendaOnline {
                     mostrarProductos();
                     break;
                 case 2:
-                    añadirProductos();
+                    addProductos();
+                    break;
+                case 3:
+                    addProductosNoSeguro();
                     break;
                 case 0:
                     System.out.println("¡Hasta luego!");
@@ -53,13 +67,52 @@ public class TiendaOnline {
         sc.close();
     }
 
+    /**
+     * Muestra todos los productos del almacen
+     */
     private static void mostrarProductos(){
         System.out.println("Has seleccionado mostrar todos los productos.");
+        // Muestra todos los productos del almacen
+        almacen.mostrarCatalogo();
+
     }
 
-    private static void añadirProductos(){
+    /**
+     * Añade productos de forma segura
+     */
+    private static void addProductos(){
         System.out.println("Has seleccionado añadir productos.");
+        // Añade un numero aleatorio de productos al almacen
+
+        for (int i = 0; i < (int) (Math.random() * 100); i++) {
+            new Thread(new AddProducto(almacen)).start();
+        }
+        try {
+            System.out.println("Añadiendo producto...");
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    /**
+     * Añade productos de forma no segura
+     */
+    private static void addProductosNoSeguro(){
+        System.out.println("Has seleccionado añadir productos de manera no segura.");
+        // Añade un numero aleatorio de productos al almacen
+
+        for (int i = 0; i < (int) (Math.random() * 100); i++) {
+            new Thread(new AddProducto(almacenNoSeguro)).start();
+        }
+        try {
+            System.out.println("Añadiendo producto...");
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     
 }

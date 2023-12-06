@@ -1,33 +1,45 @@
 package tiendaonline;
 
+import pojos.Almacen;
+import pojos.Producto;
+
+
 /**
- * Esta clase se ejecutara y crea un almacen e intenta añadir varios productos de forma concurrente al mismo almacen
+ * Clase que añade un numero aleatorio de productos al almacen de forma concurrente
  */
 public class AddProducto implements Runnable {
 
-    //add producto al almacen
-    private static Almacen almacen = new Almacen();
+    private static Almacen almacen = null;
 
-    //Metodo que añade el producto al almacen y se le pasa por parametro el almacen
-    public void addProductoEnAlmacen (Almacen almacen) {
+    /** Constructor de la clase
+     * @param almacen Almacen al que se le añadira el producto
+     */
+    public AddProducto(Almacen almacen) {
+        this.almacen = almacen;
+    }
+
+    /** Metodo que añade un producto al almacen
+     * @param almacen Almacen al que se le añadira el producto
+     * @return true si se ha añadido correctamente, false si no se ha podido añadir
+     */
+    public boolean addProductoEnAlmacen (Almacen almacen) {
         //Genera id, nombre y precio de un producto de forma aleatoria
         Producto producto = new Producto(
                 (int) (Math.random() * 100),
                 "Producto " + (int) (Math.random() * 100),
-                (int) (Math.random() * 100));
+                "Descripcion " + (int) (Math.random() * 100));
 
-        almacen.addProducto(producto);
+        return almacen.addProducto(producto);
     }
 
     @Override
     public void run() {
-        addProductoEnAlmacen(almacen);
-    }
-
-    public static void main(String[] args) {
-        // Añade un numero aleatorio de productos al almacen
-        for (int i = 0; i < (int) (Math.random() * 100); i++) {
-            new Thread(new AddProducto()).start();
+        boolean check = addProductoEnAlmacen(almacen);
+        if(check){
+            System.out.println("Producto añadido correctamente");
+        } else {
+            System.out.println("No se ha podido añadir el producto");
         }
     }
+
 }

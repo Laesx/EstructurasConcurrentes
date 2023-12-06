@@ -1,15 +1,12 @@
 package pojos;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class Almacen {
-    Queue<Producto> productos;
+    private Queue<Producto> productos;
 
-    public Almacen(){
-        productos = new ConcurrentLinkedDeque<>();
+    public Almacen(Queue<Producto> productos) {
+        this.productos = productos;
     }
 
     public boolean addProducto(Producto producto){
