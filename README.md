@@ -4,14 +4,17 @@
 
 Este proyecto Java simula un almacén en el que se utilizan hilos para gestionar diferentes operaciones concurrentes. Se utiliza `ConcurrentLinkedQueue` para manejar de manera segura las operaciones en el almacén.
 
+ConcurrentLinkedQueue es una estructura de datos en Java que se utiliza para implementar una cola concurrente. Esta cola permite el acceso simultáneo y seguro desde múltiples hilos, lo que la hace ideal para aplicaciones que requieren concurrencia.
+
 ## Características
 
 - **Gestión de Almacén:** Utiliza hilos para gestionar el contenido del almacén de productos de manera concurrente.
 - **Cola Concurrente:** Emplea `ConcurrentLinkedQueue` para asegurar la concurrencia en las operaciones del almacén.
 
-## Requisitos
+## Métodos que hemos usado
 
-- Java 7 o superior.
+- Método **remove**: Elimina una única instancia del elemento especificado de esta cola, si está presente.
+- Método **add**: Inserta el elemento especificado al final de esta cola.
 
 ## Ejecución
 
